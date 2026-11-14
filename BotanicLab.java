@@ -109,9 +109,47 @@ private void abrirMercado() {
         actualizarMarcadores();
     }
 
-  private void interactuarConCasilla(int f, int c) {
-    
-	}
+private void interactuarConCasilla(int f, int c) {
+        Planta planta = matrizPlantas[f][c];
+        if (planta == null) {
+            if (inventarioSemillas.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Inventario de semillas vacío.");
+                return;
+            }
+            String[] semillas = inventarioSemillas.toArray(new String[0]);
+            String elegida = (String) JOptionPane.showInputDialog(this, "Plantar en [" + f + "][" + c + "]:", "Sembrar", JOptionPane.QUESTION_MESSAGE, null, semillas, semillas[0]);
+            
+            if (elegida != null) {
+                if (elegida.equals("Orquídea")) {
+                    matrizPlantas[f][c] = new Orquidea();
+                } else {
+                    matrizPlantas[f][c] = new Maiz();
+                }
+                inventarioSemillas.remove(elegida);
+                areaConsola.append("🌱 Sembraste " + elegida + ".\n");
+            }
+        } else {
+            if (planta.getSalud() <= 0) {
+                matrizPlantas[f][c] = null;
+                areaConsola.append("🧹 Limpiaste planta muerta.\n");
+            } else if (planta.isListaParaCosechar()) {
+                inventarioCosechas.add(planta.getNombre());
+                matrizPlantas[f][c] = null;
+                areaConsola.append("🌾 Cosechaste " + planta.getNombre() + ".\n");
+            } else {
+                if (aguaDisponible >= 10) {
+                    aguaDisponible -= 10;
+                    planta.regar();
+                    areaConsola.append("💧 Regaste " + planta.getNombre() + ".\n");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No hay agua disponible.");
+                }
+            }
+        }
+        actualizarMarcadores();
+        actualizarMatrizGrafica();
+    }
+	
 	private void avanzarTurno() {
     
 	}
