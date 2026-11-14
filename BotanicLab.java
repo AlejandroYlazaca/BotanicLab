@@ -166,9 +166,27 @@ private void avanzarTurno() {
         actualizarMatrizGrafica();
     }
 
-    private void actualizarMatrizGrafica() {
-      
-  }
+private void actualizarMatrizGrafica() {
+        for (int i = 0; i < FILAS; i++) {
+            for (int j = 0; j < COLUMNAS; j++) {
+                Planta p = matrizPlantas[i][j];
+                if (p == null) {
+                    botonesMatriz[i][j].setText("Vacío");
+                    botonesMatriz[i][j].setBackground(new Color(230, 220, 200));
+                } else if (p.getSalud() <= 0) {
+                    botonesMatriz[i][j].setText("Muerta");
+                    botonesMatriz[i][j].setBackground(new Color(200, 180, 180));
+                } else if (p.isListaParaCosechar()) {
+                    botonesMatriz[i][j].setText("¡Cosechar!");
+                    botonesMatriz[i][j].setBackground(new Color(255, 230, 150));
+                } else {
+                    botonesMatriz[i][j].setText(p.getNombre() + " (" + p.getSalud() + "%)");
+                    botonesMatriz[i][j].setBackground(new Color(180, 230, 180));
+                }
+            }
+        }
+    }
+	
   private void actualizarMarcadores() {
     
   }
