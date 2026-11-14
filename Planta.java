@@ -65,3 +65,65 @@ class Maiz extends Planta {
         return reporte.toString();
     }
 }
+class Tomate extends Planta {
+    public Tomate() {
+        super("Tomate", 15);
+    }
+
+    @Override
+    public String procesarTurno() {
+        StringBuilder reporte = new StringBuilder();
+        if (!regadaEnEsteTurno) {
+            salud -= 25;
+            reporte.append("⚠️ Tomate sufre por falta de agua (-25 Salud).\n");
+        } else {
+            reporte.append("💧 Tomate madura con buen riego.\n");
+        }
+        regadaEnEsteTurno = false;
+        turnosCrecimiento++;
+        if (salud > 0 && turnosCrecimiento >= 2) listaParaCosechar = true;
+        return reporte.toString();
+    }
+}
+
+class Papa extends Planta {
+    public Papa() {
+        super("Papa", 10);
+    }
+
+    @Override
+    public String procesarTurno() {
+        StringBuilder reporte = new StringBuilder();
+        if (!regadaEnEsteTurno) {
+            salud -= 15;
+            reporte.append("⚠️ Papa resiste pero pierde fuerza (-15 Salud).\n");
+        } else {
+            reporte.append("💧 Papa se desarrolla bajo tierra correctamente.\n");
+        }
+        regadaEnEsteTurno = false;
+        turnosCrecimiento++;
+        if (salud > 0 && turnosCrecimiento >= 2) listaParaCosechar = true;
+        return reporte.toString();
+    }
+}
+
+class Zanahoria extends Planta {
+    public Zanahoria() {
+        super("Zanahoria", 12);
+    }
+
+    @Override
+    public String procesarTurno() {
+        StringBuilder reporte = new StringBuilder();
+        if (!regadaEnEsteTurno) {
+            salud -= 20;
+            reporte.append("⚠️ Zanahoria se debilita por sequía (-20 Salud).\n");
+        } else {
+            reporte.append("💧 Zanahoria crece sanamente.\n");
+        }
+        regadaEnEsteTurno = false;
+        turnosCrecimiento++;
+        if (salud > 0 && turnosCrecimiento >= 2) listaParaCosechar = true;
+        return reporte.toString();
+    }
+}
