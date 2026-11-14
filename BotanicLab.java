@@ -71,10 +71,44 @@ public class BotanicLab extends JFrame {
        
         actualizarMatrizGrafica();
   }
+private void abrirMercado() {
+        String[] opcionesMercado = {
+            "Comprar Semilla de Orquídea (Coste: 15 🪙)",
+            "Comprar Semilla de Maíz (Coste: 10 🪙)",
+            "Vender Cultivos Cosechados 🌾"
+        };
+        int seleccion = JOptionPane.showOptionDialog(
+                this, "Mercado - Monedas: " + monedas + " 🪙", "Mercado",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, opcionesMercado, opcionesMercado[0]
+        );
+        switch (seleccion) {
+            case 0:
+                if (monedas>=15){ monedas-=15; inventarioSemillas.add("Orquídea"); areaConsola.append("🛒 Compraste Orquídea.\n"); }
+                else JOptionPane.showMessageDialog(this, "Sin fondos.");
+                break;
+            case 1:
+                if (monedas>=10){ monedas-=10; inventarioSemillas.add("Maíz"); areaConsola.append("🛒 Compraste Maíz.\n"); }
+                else JOptionPane.showMessageDialog(this, "Sin fondos.");
+                break;
+            case 2:
+                if (inventarioCosechas.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay cosechas para vender.");
+                } else {
+                    String[] arr=inventarioCosechas.toArray(new String[0]);
+                    String venta = (String) JOptionPane.showInputDialog(this, "Elige cultivo a vender:", "Vender", JOptionPane.QUESTION_MESSAGE, null, arr, arr[0]);
+                    if (venta != null) {
+                        inventarioCosechas.remove(venta);
+                        int ganancia = venta.equals("Orquídea") ? 35 : 25;
+                        monedas += ganancia;
+                        areaConsola.append("💰 Vendiste " + venta + " por +" + ganancia + " 🪙.\n");
+                    }
+                }
+                break;
+        }
+        actualizarMarcadores();
+    }
 
-  private void abrirMercado() {
-    
-	}
   private void interactuarConCasilla(int f, int c) {
     
 	}
