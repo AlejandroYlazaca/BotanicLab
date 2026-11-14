@@ -150,9 +150,22 @@ private void interactuarConCasilla(int f, int c) {
         actualizarMatrizGrafica();
     }
 	
-	private void avanzarTurno() {
-    
-	}
+private void avanzarTurno() {
+        areaConsola.append("\n--- TURNO " + turnoActual + " ---\n");
+        for (int i = 0; i < FILAS; i++) {
+            for (int j = 0; j < COLUMNAS; j++) {
+                Planta p = matrizPlantas[i][j];
+                if (p != null && p.getSalud() > 0) {
+                    areaConsola.append(p.procesarTurno());
+                }
+            }
+        }
+        turnoActual++;
+        aguaDisponible += 20;
+        actualizarMarcadores();
+        actualizarMatrizGrafica();
+    }
+
     private void actualizarMatrizGrafica() {
       
   }
