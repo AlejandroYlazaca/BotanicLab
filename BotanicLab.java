@@ -192,10 +192,10 @@ private void interactuarConCasilla(int f, int c) {
     }
 	
 private void avanzarTurno() {
-    areaConsola.append("\n--- TURNO "+turnoActual+" ---\n");
-    for (int i=0; i<FILAS;i++) {
-        for (int j=0; j<COLUMNAS;j++) {
-            Planta p=matrizPlantas[i][j];
+    areaConsola.append("\n--- TURNO " + turnoActual + " ---\n");
+    for (int i = 0; i < tamanoActual; i++) {
+        for (int j = 0; j < tamanoActual; j++) {
+            Planta p = matrizPlantas[i][j];
             if (p != null && p.getSalud() > 0) {
                 areaConsola.append(p.procesarTurno());
             }
@@ -206,7 +206,29 @@ private void avanzarTurno() {
     actualizarMarcadores();
     actualizarMatrizGrafica();
 }
+	
+private void reconstruirMatrizGrafica() {
+    panelMatriz.removeAll();
+    panelMatriz.setLayout(new GridLayout(tamanoActual, tamanoActual, 8, 8));
 
+    for (int i = 0; i < tamanoActual; i++) {
+        for (int j = 0; j < tamanoActual; j++) {
+            final int f = i;
+            final int c = j;
+            if (botonesMatriz[i][j] == null) {
+                botonesMatriz[i][j] = new JButton("Vacío");
+                botonesMatriz[i][j].setFont(new Font("SansSerif", Font.PLAIN, 11));
+                botonesMatriz[i][j].addActionListener(e -> interactuarConCasilla(f, c));
+            }
+            panelMatriz.add(botonesMatriz[i][j]);
+        }
+    }
+
+    actualizarMatrizGrafica();
+    panelMatriz.revalidate();
+    panelMatriz.repaint();
+}
+	
 private void actualizarMatrizGrafica(){
     for (int i=0; i<FILAS;i++) {
         for (int j = 0; j < COLUMNAS; j++) {
@@ -299,5 +321,12 @@ private int obtenerCostoMejoraJardin() {
 	
 }
 private void procesarDesbloqueo(String especie, int costo) {
-	
+	if (monedas >= costo) {
+        monedas -= costo;
+        plantasDesbloqueadas.add(especie);
+        actualizarMarcadores();
+        areaConsola.append("🔓 Desbloqueaste la especie " + especie + " (-" + costo + " 🪙).\n");
+    } else {
+        JOptionPane.showMessageDialog(this, "No tienes suficientes monedas para desbloquear " + especie + ".");
+    }
 }
