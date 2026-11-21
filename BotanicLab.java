@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BotanicLab extends JFrame {
-    private final int FILAS = 3;
-    private final int COLUMNAS = 3;
-    private Planta[][] matrizPlantas = new Planta[FILAS][COLUMNAS];
-    private JButton[][] botonesMatriz = new JButton[FILAS][COLUMNAS];
+    private final int MAX_TAMANO = 5;
+    private int tamanoActual = 3;
+    private Planta[][] matrizPlantas = new Planta[MAX_TAMANO][MAX_TAMANO];
+    private JButton[][] botonesMatriz = new JButton[MAX_TAMANO][MAX_TAMANO];
+    private Set<String> plantasDesbloqueadas = new HashSet<>();
+    private JPanel panelMatriz;
     private int aguaDisponible = 60;
     private int monedas = 30;
     private int turnoActual = 1;
