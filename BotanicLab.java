@@ -227,9 +227,34 @@ private void actualizarMatrizGrafica(){
         }
     }
 }
-	
-private void actualizarMarcadores(){
-        lblEstado.setText("Turno: "+turnoActual+" | 💧: "+aguaDisponible+" |M: "+monedas+" | 🎒 Semillas: "+inventarioSemillas.size()+"| 📦 Cosechas: "+inventarioCosechas.size());
+
+
+private void mejorarJardin() {
+    if (tamanoActual >= MAX_TAMANO) {
+        JOptionPane.showMessageDialog(this, "El jardín ya alcanzó su tamaño máximo (" + MAX_TAMANO + "x" + MAX_TAMANO + ").");
+        return;
+    }
+
+    int costo = obtenerCostoMejoraJardin();
+    int nuevoTamano = tamanoActual + 1;
+    int confirmacion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Expandir jardín de " + tamanoActual + "x" + tamanoActual + " a " + nuevoTamano + "x" + nuevoTamano + " por " + costo + " 🪙?",
+            "Mejorar Jardín",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        if (monedas >= costo) {
+            monedas -= costo;
+            tamanoActual = nuevoTamano;
+            reconstruirMatrizGrafica();
+            actualizarMarcadores();
+            areaConsola.append("📐 ¡Jardín expandido a " + tamanoActual + "x" + tamanoActual + "! (-" + costo + " 🪙).\n");
+        } else {
+            JOptionPane.showMessageDialog(this, "No tienes suficientes monedas.");
+        }
+    }
 }
 public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> new BotanicLab().setVisible(true));
