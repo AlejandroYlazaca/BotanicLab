@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BotanicLab extends JFrame {
     private final int MAX_TAMANO = 5;
@@ -87,66 +89,69 @@ public class BotanicLab extends JFrame {
         actualizarMatrizGrafica();
   }
 private void abrirMercado() {
-        String[] opcionesMercado = {
-            "Semilla Orquídea (Coste: 15 🪙)",
-            "Semilla Maíz (Coste: 10 🪙)",
-            "Semilla Tomate (Coste: 12 🪙)",
-            "Semilla Papa (Coste: 8 🪙)",
-            "Semilla Zanahoria (Coste: 10 🪙)",
-            "Vender Cultivos Cosechados 🌾"
-        };
+    List<String> opciones = new ArrayList<>();
+    List<String> claves = new ArrayList<>();
 
-        int seleccion = JOptionPane.showOptionDialog(
-                this, "Mercado - Monedas: " + monedas + " 🪙", "Mercado",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
-                null, opcionesMercado, opcionesMercado[0]
-        );
+    if (plantasDesbloqueadas.contains("Maíz")) {
+        opciones.add("Semilla Maíz (Coste: 10 🪙)");
+        claves.add("Maíz");
+    }
+    if (plantasDesbloqueadas.contains("Papa")) {
+        opciones.add("Semilla Papa (Coste: 8 🪙)");
+        claves.add("Papa");
+    }
+    if (plantasDesbloqueadas.contains("Tomate")) {
+        opciones.add("Semilla Tomate (Coste: 12 🪙)");
+        claves.add("Tomate");
+    }
+    if (plantasDesbloqueadas.contains("Zanahoria")) {
+        opciones.add("Semilla Zanahoria (Coste: 10 🪙)");
+        claves.add("Zanahoria");
+    }
+    if (plantasDesbloqueadas.contains("Orquídea")) {
+        opciones.add("Semilla Orquídea (Coste: 15 🪙)");
+        claves.add("Orquídea");
+    }
+    opciones.add("Vender Cultivos Cosechados 🌾");
+    claves.add("VENDER");
 
-        switch (seleccion) {
-            case 0:
-                if (monedas >= 15) { monedas -= 15; inventarioSemillas.add("Orquídea"); areaConsola.append("🛒 Compraste Orquídea.\n"); }
-                else JOptionPane.showMessageDialog(this, "Sin fondos.");
+    String[] opcionesMercado = opciones.toArray(new String[0]);
+    int seleccion = JOptionPane.showOptionDialog(
+            this,
+            "Mercado - Monedas: " + monedas + " 🪙",
+            "Mercado",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opcionesMercado,
+            opcionesMercado[0]
+    );
+
+    if (seleccion >= 0 && seleccion < claves.size()) {
+        String clave = claves.get(seleccion);
+        switch (clave) {
+            case "Maíz":
+                comprarSemilla("Maíz", 10);
                 break;
-            case 1:
-                if (monedas >= 10) { monedas -= 10; inventarioSemillas.add("Maíz"); areaConsola.append("🛒 Compraste Maíz.\n"); }
-                else JOptionPane.showMessageDialog(this, "Sin fondos.");
+            case "Papa":
+                comprarSemilla("Papa", 8);
                 break;
-            case 2:
-                if (monedas >= 12) { monedas -= 12; inventarioSemillas.add("Tomate"); areaConsola.append("🛒 Compraste Tomate.\n"); }
-                else JOptionPane.showMessageDialog(this, "Sin fondos.");
+            case "Tomate":
+                comprarSemilla("Tomate", 12);
                 break;
-            case 3:
-                if (monedas >= 8) { monedas -= 8; inventarioSemillas.add("Papa"); areaConsola.append("🛒 Compraste Papa.\n"); }
-                else JOptionPane.showMessageDialog(this, "Sin fondos.");
+            case "Zanahoria":
+                comprarSemilla("Zanahoria", 10);
                 break;
-            case 4:
-                if (monedas >= 10) { monedas -= 10; inventarioSemillas.add("Zanahoria"); areaConsola.append("🛒 Compraste Zanahoria.\n"); }
-                else JOptionPane.showMessageDialog(this, "Sin fondos.");
+            case "Orquídea":
+                comprarSemilla("Orquídea", 15);
                 break;
-            case 5:
-                if (inventarioCosechas.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "No hay cosechas para vender.");
-                } else {
-                    String[] arr = inventarioCosechas.toArray(new String[0]);
-                    String venta = (String) JOptionPane.showInputDialog(this, "Elige cultivo a vender:", "Vender", JOptionPane.QUESTION_MESSAGE, null, arr, arr[0]);
-                    if (venta != null) {
-                        inventarioCosechas.remove(venta);
-                        int ganancia = 20;
-                        switch (venta) {
-                            case "Orquídea": ganancia = 35; break;
-                            case "Maíz": ganancia = 25; break;
-                            case "Tomate": ganancia = 28; break;
-                            case "Papa": ganancia = 18; break;
-                            case "Zanahoria": ganancia = 22; break;
-                        }
-                        monedas += ganancia;
-                        areaConsola.append("💰 Vendiste " + venta + " por +" + ganancia + " 🪙.\n");
-                    }
-                }
+            case "VENDER":
+                venderCultivo();
                 break;
         }
-        actualizarMarcadores();
     }
+    actualizarMarcadores();
+}
 private void interactuarConCasilla(int f, int c) {
         Planta planta = matrizPlantas[f][c];
 
@@ -229,25 +234,29 @@ private void reconstruirMatrizGrafica() {
     panelMatriz.repaint();
 }
 	
-private void actualizarMatrizGrafica(){
-    for (int i=0; i<FILAS;i++) {
-        for (int j = 0; j < COLUMNAS; j++) {
+private void actualizarMatrizGrafica() {
+    for (int i = 0; i < tamanoActual; i++) {
+        for (int j = 0; j < tamanoActual; j++) {
             Planta p = matrizPlantas[i][j];
-            if(p==null){
+            if (p == null) {
                 botonesMatriz[i][j].setText("Vacío");
                 botonesMatriz[i][j].setBackground(new Color(230, 220, 200));
-            }else if(p.getSalud() <= 0) {
+            } else if (p.getSalud() <= 0) {
                 botonesMatriz[i][j].setText("Muerta");
                 botonesMatriz[i][j].setBackground(new Color(200, 180, 180));
-            }else if(p.isListaParaCosechar()) {
+            } else if (p.isListaParaCosechar()) {
                 botonesMatriz[i][j].setText("¡Cosechar!");
                 botonesMatriz[i][j].setBackground(new Color(255, 230, 150));
-            }else{
+            } else {
                 botonesMatriz[i][j].setText(p.getNombre() + " (" + p.getSalud() + "%)");
                 botonesMatriz[i][j].setBackground(new Color(180, 230, 180));
             }
         }
     }
+}
+
+private void actualizarMarcadores() {
+    lblEstado.setText("Turno: " + turnoActual + " | Jardín: " + tamanoActual + "x" + tamanoActual + " | 💧: " + aguaDisponible + " | 🪙: " + monedas + " | 🎒 Semillas: " + inventarioSemillas.size() + " | 📦 Cosechas: " + inventarioCosechas.size());
 }
 
 
@@ -318,7 +327,9 @@ public static void main(String[] args) {
 }
 
 private int obtenerCostoMejoraJardin() {
-	
+    if (tamanoActual == 3) return 50;
+    if (tamanoActual == 4) return 90;
+    return -1;
 }
 private void procesarDesbloqueo(String especie, int costo) {
 	if (monedas >= costo) {
