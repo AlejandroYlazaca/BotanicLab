@@ -256,18 +256,46 @@ private void mejorarJardin() {
         }
     }
 }
+
+private void abrirMenuDesbloqueo() {
+    List<String> opcionesBloqueadas = new ArrayList<>();
+    if (!plantasDesbloqueadas.contains("Tomate")) opcionesBloqueadas.add("Tomate (Coste: 25 🪙)");
+    if (!plantasDesbloqueadas.contains("Zanahoria")) opcionesBloqueadas.add("Zanahoria (Coste: 30 🪙)");
+    if (!plantasDesbloqueadas.contains("Orquídea")) opcionesBloqueadas.add("Orquídea (Coste: 45 🪙)");
+
+    if (opcionesBloqueadas.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "¡Ya desbloqueaste todas las especies disponibles!");
+        return;
+    }
+
+    String[] arr = opcionesBloqueadas.toArray(new String[0]);
+    String seleccion = (String) JOptionPane.showInputDialog(
+            this,
+            "Monedas: " + monedas + " 🪙\nElige una especie para desbloquear:",
+            "Desbloquear Plantas",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            arr,
+            arr[0]
+    );
+
+    if (seleccion != null) {
+        if (seleccion.startsWith("Tomate")) {
+            procesarDesbloqueo("Tomate", 25);
+        } else if (seleccion.startsWith("Zanahoria")) {
+            procesarDesbloqueo("Zanahoria", 30);
+        } else if (seleccion.startsWith("Orquídea")) {
+            procesarDesbloqueo("Orquídea", 45);
+        }
+    }
+}
+	
 public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> new BotanicLab().setVisible(true));
       }
 }
 
-private void mejorarJardin() {
-	
-}
 private int obtenerCostoMejoraJardin() {
-	
-}
-private void abrirMenuDesbloqueo() {
 	
 }
 private void procesarDesbloqueo(String especie, int costo) {
