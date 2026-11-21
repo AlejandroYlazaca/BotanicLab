@@ -1,4 +1,4 @@
-public abstract class Planta {
+abstract class Planta {
     protected String nombre;
     protected int salud;
     protected boolean regadaEnEsteTurno;
@@ -21,7 +21,6 @@ public abstract class Planta {
     }
 
     public abstract String procesarTurno();
-
     public String getNombre() { return nombre; }
     public int getSalud() { return salud; }
     public boolean isListaParaCosechar() { return listaParaCosechar; }
@@ -31,40 +30,44 @@ class Orquidea extends Planta {
     public Orquidea() {
         super("Orquídea", 20);
     }
+
     @Override
     public String procesarTurno() {
-        StringBuilder reporte=new StringBuilder();
+        StringBuilder reporte = new StringBuilder();
         if (!regadaEnEsteTurno) {
-            salud -= 35;
+            salud -= 30;
             reporte.append("⚠️ Orquídea se deshidrata severamente (-30 Salud).\n");
         } else {
             reporte.append("💧 Orquídea florece elegantemente bajo riego.\n");
         }
         regadaEnEsteTurno = false;
         turnosCrecimiento++;
-        if (salud > 0 && turnosCrecimiento >= 6) listaParaCosechar = true;
+        if (salud > 0 && turnosCrecimiento >= 5) listaParaCosechar = true;
         return reporte.toString();
     }
 }
+
 class Maiz extends Planta {
     public Maiz() {
         super("Maíz", 10);
     }
+
     @Override
     public String procesarTurno() {
         StringBuilder reporte = new StringBuilder();
         if (!regadaEnEsteTurno) {
-            salud -= 25;
+            salud -= 20;
             reporte.append("⚠️ Maíz pierde vigor por sequía (-20 Salud).\n");
         } else {
             reporte.append("💧 Maíz crece fuerte y verde.\n");
         }
         regadaEnEsteTurno = false;
         turnosCrecimiento++;
-        if (salud > 0 && turnosCrecimiento >= 2) listaParaCosechar = true;
+        if (salud > 0 && turnosCrecimiento >= 4) listaParaCosechar = true;
         return reporte.toString();
     }
 }
+
 class Tomate extends Planta {
     public Tomate() {
         super("Tomate", 15);
@@ -81,7 +84,7 @@ class Tomate extends Planta {
         }
         regadaEnEsteTurno = false;
         turnosCrecimiento++;
-        if (salud > 0 && turnosCrecimiento >= 2) listaParaCosechar = true;
+        if (salud > 0 && turnosCrecimiento >= 3) listaParaCosechar = true;
         return reporte.toString();
     }
 }
@@ -123,7 +126,8 @@ class Zanahoria extends Planta {
         }
         regadaEnEsteTurno = false;
         turnosCrecimiento++;
-        if (salud > 0 && turnosCrecimiento >= 2) listaParaCosechar = true;
+        if (salud > 0 && turnosCrecimiento >= 3) listaParaCosechar = true;
         return reporte.toString();
     }
 }
+        
