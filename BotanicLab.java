@@ -18,6 +18,9 @@ public class BotanicLab extends JFrame {
     private JLabel lblEstado;
     private JTextArea areaConsola;
     public BotanicLab() {
+		plantasDesbloqueadas.add("Maíz");
+		plantasDesbloqueadas.add("Papa");
+		
         setTitle("BotanicLab - Gestión de Laboratorio Botánico");
         setSize(780, 620);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,6 +65,16 @@ public class BotanicLab extends JFrame {
         btnMercado.setBackground(new Color(255, 240, 200));
         btnMercado.addActionListener(e -> abrirMercado());
         panelBotonesAccion.add(btnMercado);
+
+		JButton btnDesbloquear = new JButton("🔓 Desbloquear Plantas");
+        btnDesbloquear.setBackground(new Color(225, 225, 250));
+        btnDesbloquear.addActionListener(e -> abrirMenuDesbloqueo());
+        panelBotonesAccion.add(btnDesbloquear);
+
+        JButton btnMejorarJardin = new JButton("📐 Mejorar Tamaño del Jardín");
+        btnMejorarJardin.setBackground(new Color(255, 225, 210));
+        btnMejorarJardin.addActionListener(e -> mejorarJardin());
+        panelBotonesAccion.add(btnMejorarJardin);
 
         JButton btnAvanzarTurno = new JButton("⌛ Pasar de Turno");
         btnAvanzarTurno.setBackground(new Color(220, 240, 220));
@@ -218,8 +231,20 @@ private void actualizarMatrizGrafica(){
 private void actualizarMarcadores(){
         lblEstado.setText("Turno: "+turnoActual+" | 💧: "+aguaDisponible+" |M: "+monedas+" | 🎒 Semillas: "+inventarioSemillas.size()+"| 📦 Cosechas: "+inventarioCosechas.size());
 }
-  public static void main(String[] args) {
-          SwingUtilities.invokeLater(() -> new BotanicLab().setVisible(true));
+public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> new BotanicLab().setVisible(true));
       }
-  }
+}
 
+private void mejorarJardin() {
+	
+}
+private int obtenerCostoMejoraJardin() {
+	
+}
+private void abrirMenuDesbloqueo() {
+	
+}
+private void procesarDesbloqueo(String especie, int costo) {
+	
+}
